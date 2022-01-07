@@ -7,6 +7,7 @@ class Quiz extends Component {
         this.state = {
             chapterSubmitPage: null,
             score: 0,
+            max_questions: 0,
             currentQuizIndex: 0,
             quizPageOpen: false,
             quizQuestions: [
@@ -145,6 +146,9 @@ class Quiz extends Component {
             ]
         }
     }
+    componentWillUnmount = () => {
+        console.log("will unmount")
+    }
 
     onNextQuestions = () => {
         if (this.state.currentQuizIndex < this.state.quizQuestions.length - 1) {
@@ -259,29 +263,44 @@ class Quiz extends Component {
 
                             } */}
 
-                            {
+                            {/* {
                                 this.state.currentQuizIndex === this.state.quizQuestions.length - 1 &&
                                 <button type="button" className="btn btn-highlight-success next-button"
                                     onClick={this.onSubmitQuestions} > Submit </button>
 
-                            }
+                            } */}
                             <input
                                 // id="typeinp"
                                 type="range"
-                                min={0} max={this.state.quizQuestions.length - 1}
-                                value={this.state.quizQuestions[this.state.currentQuizIndex]}
+                                min={0} max={this.state.quizQuestions.length -1}
+                                value={this.state.currentQuizIndex}
                                 onChange={(e) => {
                                     console.log("render = ", e.target.value)
-                                    if (Number(e.target.value) < this.state.quizQuestions.length) {
-                                        console.log("input =", this.state.quizQuestions[Number(e.target.value)].answers)
+                                    if (Number(e.target.value) > this.state.max_questions) {
                                         this.setState({
-                                            currentQuizIndex: Number(e.target.value)
+                                            max_questions: Number(e.target.value),
+                                            // currentQuizIndex: this.state.max_questions
                                         })
                                     }
+                                    if (Number(e.target.value) < this.state.max_questions && this.state.quizQuestions[this.state.currentQuizIndex].answers.length != 0) {
+                                        console.log("input =", this.state.quizQuestions[Number(e.target.value)].answers)
+                                        this.setState({
+                                            currentQuizIndex: Number(e.target.value),
+
+                                        })
+                                    }
+                                    // if ( this.state.quizQuestions[this.state.currentQuizIndex].answers.length != 0){
+                                    //     this.setState({
+                                    //         currentQuizIndex: Number(e.target.value),
+
+                                    //     })
+                                    // }
+                                    console.log("max=", Number(e.target.value) < this.state.max_questions && this.state.quizQuestions[this.state.currentQuizIndex].answers.length != 0)
+
                                 }}
                                 step={1}
                             />
-
+                            <h1>Percentage of quiz complete : {Math.floor((this.state.currentQuizIndex / (this.state.quizQuestions.length - 1)) * 100)}% </h1>
                         </div>
 
 
